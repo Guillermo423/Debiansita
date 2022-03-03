@@ -1,0 +1,183 @@
+\input{dune-docker-preamble}
+
+\begin{document}
+
+\frame[plain,noframenumbering]{\titlepage}
+
+\begin{frame}
+	\frametitle{Objetivos de esta introdución}
+	A number of advanced.
+	\begin{itemize}
+		\item Correr los \href{https://github.com/orgs/cpp-review-dune/packages}{imágenes prediseñadas} con el programa \lstinline{docker} en sistemas tipo Unix.
+		\item Crear una malla con \lstinline{gmsh} a través de la API (C/C++, Python, Julia).
+		\item Realizar los ejemplos resueltos del \textsc{Dune book}.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conociendo el sistema operativo \href{https://archlinux.org}{Arch Linux}}
+
+	Es una distribución GNU/Linux de propósito general, desarrollada\footnote{El líder del proyecto es \href{https://wiki.archlinux.org/title/User:Anthraxx}{\texttt{Anthraxx}}, desarrollador alemán del kernel \href{https://github.com/anthraxx/linux-hardened}{\texttt{linux-hardened}}.} independientemente para procesadores x86-64, que se adhiere a los principios de simplicidad, modernidad, pragmatismo, centrado en usuarios y versatilidad.
+
+	\
+
+	Proporciona las últimas versiones estables de la mayoría del software siguiendo el modelo de \href{https://en.wikipedia.org/wiki/Rolling\_release}{lanzamiento continuo}, no existen versiones como en Ubuntu 20.04, 21.10, 22.04, etc.
+
+	\
+
+	Arch está respaldado por \lstinline{pacman}, un gestor de paquetes ligero, sencillo y rápido, que permite actualizar todo el sistema con una orden.
+	Los scripts \href{https://wiki.archlinux.org/title/PKGBUILD}{PKGBUILD} aportados por la comunidad para la elaboración desde las fuentes, como los módulos de DUNE, se encuentran en el \href{http://aur.archlinux.org}{\emph{Arch User Repository}}.
+
+	\begin{table}[ht!]
+		\caption{Comparación de la línea de comando del gestión de software (fuente: \url{wiki.archlinux.org})}
+		\centering\footnotesize
+		\begin{tabular}{cccp{50pt}cc}
+			\toprule
+			Acción             & Arch                    & Red Hat/Fedora          & Debian/Ubuntu                                          & SLES/openSUSE           & Gentoo
+			\tabularnewline
+			\midrule
+			Instala paquetes   & \lstinline|pacman -S|  & \lstinline|dnf install|  & \lstinline|apt install|                                 & \lstinline|zypper install|  & \lstinline|emerge -a|
+			\tabularnewline
+			Elimina paquetes   & \lstinline|pacman -Rs|  & \lstinline|dnf remove|  & \lstinline|apt remove|                                 & \lstinline|zypper remove|  & \lstinline|emerge -C|
+			\tabularnewline
+			Busca paquetes     & \lstinline|pacman -Ss| & \lstinline|dnf search| & \lstinline|apt search|                                & \lstinline|zypper search| & \lstinline|emerge -S|
+			\tabularnewline
+			Actualiza paquetes & \lstinline|pacman -Syu| & \lstinline|dnf upgrade| & \lstinline|apt update \&\&|\newline\lstinline|apt upgrade| & \lstinline|zypper update| & \lstinline|emerge -u world|
+			\tabularnewline
+			\bottomrule
+		\end{tabular}
+	\end{table}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Filosofía de Arch}
+
+	\begin{description}
+		\item[Simplicidad]
+			Es minimalista.
+			Se usa herramienta pequeñas que sigue la filosofía de UNIX, de modo que tengas una base muy pequeña que deje configurar la máquina de manera más cómoda para el usuario.
+		\item[Modernidad]
+			Mantener la paquetería lo más actualizada posible sin sacrificar la estabilidad. Cuenta con los compiladores más actuales de \lstinline{gcc}, \lstinline{lualatex}, \lstinline{go}, etc.
+		\item[Pragmatismo]
+			La gran cantidad de paquetes y scripts de compilación en los diversos repositorios de Arch Linux ofrecen software gratuito y de código abierto para quienes lo prefieren, así como paquetes de software propietario para quienes adoptan la funcionalidad por encima de la ideología.
+		\item[Centrado a las usuarias y usuarios]
+			La distribución está destinada a satisfacer las necesidades de quienes contribuyen a ella, en lugar de intentar atraer a tantos usuarios como sea posible.
+			Está dirigido al usuario competente de GNU/Linux, o cualquier persona con una actitud de hágalo usted mismo que esté dispuesto a leer la documentación y resolver sus propios problemas.
+			Se anima a todos los usuarios a participar y contribuir a la distribución.
+			Informar y ayudar a corregir errores es muy valioso y los parches que mejoran los paquetes o los proyectos principales son muy apreciados: los desarrolladores de Arch son voluntarios y los contribuyentes activos a menudo se convertirán en parte de ese equipo.
+		\item[Versatilidad]
+	\end{description}
+
+\end{frame}
+
+\begin{frame}
+
+	En esta ocasión hemos elegido Arch Linux como ambiente de trabajo porque tiene disponible una gran variedad de módulos de DUNE.
+	Es recomendable habilitar el repositorio \href{https://wiki.archlinux.org/title/Unofficial\_user\_repositories\#arch4edu}{\texttt{arch4edu}}\footnote{Administrado por Jingbei Li de la Universidad de Tsinghua.}.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Usando el emulador de terminal}
+	% Una consola es un display del sistema
+	% En todo lo que sigue, usaremos el shell \lstinline{bash}.
+
+	% GNU General Public License v2.0
+	% GNU Lesser General Public License v2.1
+	% BSD 3-Clause "New" or "Revised" License
+
+	% El terminal te da acceso al shell, que nos da acceso al sistema operativo subyacente.
+	% El shell, sabe interactuar entre el usuario y el sistema operativo.
+
+	% CLI Command Line Interface
+\end{frame}
+
+\begin{frame}
+	% pwd
+	% El cursor parpadeante al final de la línea es donde se ingresan los comandos basados ​​en texto. Puede comenzar a experimentar con un comando simple, Imprimir directorio de trabajo (pwd), que muestra la carpeta actual en la que se encuentra en la pantalla. Escriba pwd y presione Entrar.
+
+	% Todos los comandos que ingresa funcionan de la misma manera: ingresa el comando, incluye cualquier parámetro para extender el uso del comando y presiona Enter para ejecutar la línea de comando que ingresó. Escribe en la Terminal: uname -a y presiona Enter. Esto muestra información del sistema con respecto a Mint
+\end{frame}
+
+\begin{frame}[fragile]
+	\begin{lstlisting}
+    gitpod ~/dune-basics $ cd
+  \end{lstlisting}
+\end{frame}
+
+%\lstinputpath{../../../sandbox}
+
+\begin{frame}[fragile]
+	\frametitle{Classes}
+
+	\lstinputlisting[
+		caption={Programa \texttt{hello-linux.cc}.},
+		label=hello-linux.cc,
+	]{../../../sandbox/hello-linux.cc}
+
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Classes}
+
+	\lstinputlisting[
+		caption={Programa \texttt{dune-basics.cc}.},
+		label=dune-basics.cc,
+	]{../../../src/dune-basics.cc}
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Classes}
+
+	\lstinputlisting[
+		caption={Programa \texttt{dune-basics.cc}.},
+		label=dune-basics.cc,
+	]{../../../sandbox/dune-math-constants.cc}
+
+\end{frame}
+%https://archlinux.org/logos/archlinux-icon-crystal-256.svg
+
+\begin{frame}
+	\frametitle{El comando \lstinline{duneproject}}
+	% https://gitlab.dune-project.org/core/dune-common/-/raw/master/bin/duneproject
+	Es un asistente en el lenguaje \lstinline{bash} que se encuentra en \lstinline{/usr/bin/duneproject}\ldots
+
+\end{frame}
+
+\begin{frame}\transblindsvertical
+	\frametitle{Referencias}
+	%------------------------------------------------------------ 1
+	\only<1>{
+		\begin{itemize}
+			\item Libros
+			      \nocite{*}
+			      \printbibliography[heading=none,keyword=book]
+		\end{itemize}
+	}
+	%------------------------------------------------------------ 2
+	\only<2>{
+		\begin{itemize}
+			\item Artículos
+			      \printbibliography[heading=none,keyword=paper]
+		\end{itemize}
+	}
+	%------------------------------------------------------------ 3
+	\only<3>{
+		\begin{itemize}
+			\item Sitios web
+			      \printbibliography[heading=none,keyword=online]
+		\end{itemize}
+	}
+\end{frame}
+
+\end{document}
+%https://github.com/easybuilders/easybuild/wiki/EasyBuild-Tech-Talks-I%3A-Open-MPI
+% https://www.youtube.com/playlist?list=PLagFkXs2BczZO4B_I6YhuS4xOxlSPgZuT
+% https://www.youtube.com/playlist?list=PLagFkXs2BczZGsvnN7UAqd5LWfgOrat0v
+% https://www.youtube.com/playlist?list=PLZRRlbOTxTmAMASXs7mAFnKkFZ3ohefTF
+% https://www.youtube.com/playlist?list=PLZRRlbOTxTmBERH5Ov1kWhPlmOQAP04zi
+% https://www.youtube.com/playlist?list=PLZRRlbOTxTmCaBYeLHQyqMFyI6caKsVDd
+% https://www.youtube.com/playlist?list=PLZRRlbOTxTmB_gV8rLQ6N9KDX5po5eTay
+% https://www.youtube.com/playlist?list=PLZRRlbOTxTmCyLkmjWg0e8cNk6rONT-mk

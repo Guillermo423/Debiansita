@@ -1,0 +1,234 @@
+% arara: lualatex: { shell: yes }
+% arara: lualatex: { shell: yes }
+\input{dune-git-preamble}
+
+\begin{document}
+
+\frame[plain,noframenumbering]{\titlepage}
+
+\begin{frame}
+	\frametitle{Vídeos recomendados en \texttt{diode.zone}~\diode{}}
+	\begin{itemize}
+		\item[\diode{}] \href{https://diode.zone/w/fd7db693-38be-46fd-871d-dfb545953231}{Introducción, clonar un repositorio en Windows 10 con Visual Studio Community 2019}.
+		\item[\diode{}] \href{https://diode.zone/w/6c6997e0-73d9-4346-b9d3-6643edf5942a}{Clonar un repositorio, añadir cambios, hacer confirmación y subir objetos a GitHub}.
+		\item[\diode{}] \href{https://diode.zone/w/7nbonxgvEr7FMTgkKrEu4N}{¿Qué es un control de versiones?}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Instalación de~\git{}}
+	En la distribución Arch Linux, el binario se instala con la siguiente directiva
+	\begin{verbatim}
+[user@host somedir]$ sudo pacman -Syu git
+    \end{verbatim}
+	Si ya tiene instalado \lstinline|dune-common|, entonces ya tendrá instalado \lstinline|git| como dependencia.
+
+	\
+
+	En macOS instale \href{https://brew.sh}{\lstinline|homebrew|} y a continuación escriba en el emulador de terminal \lstinline|brew install git|. Para Windows 10/11, siga este \href{https://courses-2020-1.gitlab.io/abet-project/guideofuser.pdf}{\alert{tutorial}}.
+\end{frame}
+
+\begin{frame}
+	\frametitle{¿Qué características tiene un control de versiones?}
+
+	Según la entrada de~\href{https://es.wikipedia.org}{Wikipedia}, un sistema de control de versiones debe proporcionar:
+
+	\begin{quote}\itshape
+		\begin{itemize}
+			\item Mecanismo de almacenamiento de los elementos que deba gestionar.
+			\item Posibilidad de realizar cambios sobre los elementos almacenados.
+			\item Registro histórico de las acciones realizadas con cada elemento o conjunto de elementos (normalmente pudiendo volver o extraer un estado anterior del producto).
+		\end{itemize}
+		\
+		\noindent\hfill\color{DarkBlue}$\left(\faIcon{wikipedia-w}\right)$
+	\end{quote}
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Autentificación}
+	Desde el 13 de agosto del 2021\footnote{https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations}, GitHub no aceptará la autentificación vía contraseña, por lo que podemos continuar vía token o claves SSH. Optaremos por la última opción\footnote{https://docs.github.com/es/github/authenticating-to-github/connecting-to-github-with-ssh}.
+
+	En la distribución Arch Linux, el binario se instala con la siguiente directiva
+	\begin{verbatim}
+[user@host somedir]$ sudo pacman -Syu openssh
+    \end{verbatim}
+	Es un \href{https://www.openssh.com}{port del software SSH} (Secure Shell) del proyecto OpenBSD bajo la licencia BSD.
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{}
+	\begin{verbatim}
+		[user@host somedir]$ git config --list
+	\end{verbatim}
+	En el directorio \lstinline|~/.ssh| tendrá \lstinline|id_ed25519.pub| \lstinline|id_ed25519| \lstinline|config| \lstinline|known_hosts|.
+	\lstinline|man ssh|.
+\end{frame}
+%https://git-scm.com/book/es/v2/Git-en-el-Servidor-Generando-tu-clave-p%C3%BAblica-SSH
+
+\begin{frame}[fragile]
+	\frametitle{Utilizando el sistema de firma de clave pública \href{https://ed25519.cr.yp.to}{Ed25519}}
+	Abra un emulador de terminal y escriba
+	\begin{verbatim}
+		[user@host somedir]$ ssh-keygen -t ed25519 -C "<comentario>"
+	\end{verbatim}
+	También podría optar el cifrado RSA, de la siguiente manera
+	\begin{verbatim}
+		[user@host somedir]$ ssh-keygen -t rsa -b 4096 -C "<comentario>"
+	\end{verbatim}
+	En caso de que no desee fijar una contraseña continue con la tecla Intro hasta acabar las preguntas.
+
+	Si luego desea que no le pida la contraseña en cada intento, agregue en el archivo \lstinline|~/.gitconfig| lo siguiente:
+	\begin{verbatim}
+[credential]
+        helper = cache --timeout=3600
+	\end{verbatim}
+
+	Como paso final, copie su clave pública (.pub) en la siguiente caja
+\end{frame}
+
+\begin{frame}
+	\frametitle{¿Por qué usar un control de versiones?}
+	Si no tiene un SCV, las cosas se salen de control muy
+	rápidamente.
+
+	Las razones adecuadas son:
+	\begin{description}
+		\item[Colaboración] el SCV permite que un equipo de personas
+			trabaje en el mismo proyecto al mismo tiempo.
+		\item[Almacenamiento de versiones] el SCV gestiona todas las
+			versiones de todos los archivos, los almacena, los nombra y
+			puede recuperarlos.
+		\item[Seguimiento de los cambios] el SCV registra con precisión
+			lo que se cambió y se debe dar una razón para el cambio.
+		\item[Restaurar cambios y rutas de regresión] el SCV permite
+			restaurar archivos individuales o grupos de archivos a una
+			versión anterior.
+	\end{description}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Terminología
+		\fontspec[Renderer=Harfbuzz]{NotoColorEmoji.ttf}📖}
+	\begin{description}
+		\item[Repositorio]
+
+			Es una base de datos que contiene toda la información acerca de las versiones de los archivos en un proyecto, ubicado en una carpeta oculta \lstinline|.git|.
+
+		\item[Confirmación]
+
+			Instantánea global de todos los archivos del proyecto con descripción de los cambios con respecto a la versión anterior.
+
+		\item[Rama]
+
+			Secuencia de commits que describe una rama (línea) de desarrollo. Un repositorio puede contener más de uno. La rama estándar se llama \lstinline|main| o \lstinline|master|.
+
+		\item[Tag]
+
+			Nombre persistente (identificador) para un commit, por ejemplo, cuando hace un lanzamiento público.
+	\end{description}
+\end{frame}
+
+\begin{frame}[fragile]
+	Es una buena idea presentarse a Git con su nombre y dirección de
+	correo electrónico pública antes de realizar cualquier operación.
+	La forma más sencilla de hacerlo es:
+
+	\begin{verbatim}
+[user@host somedir]$ git config --global user.name <user>
+[user@host somedir]$ git config --global user.email <user@example.com>
+		\end{verbatim}
+	Remplace \lstinline|<user>| por el
+	usuario de GitHub (sin \MVAt) y
+	\lstinline|<user@example.com>| por el correo
+	registrado en GitHub.
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{Confirmaciones
+		\fontspec[Renderer=Harfbuzz]{NotoColorEmoji.ttf}🔖}
+
+	Una confirmación contiene
+	\begin{itemize}
+		\item una instantánea de todos los archivos.
+		\item la fecha de creación.
+		\item el nombre y contenido con respecto al autor de los cambios.
+		\item una lista de cambios.
+		\item una lista de referencias a confirmaciones principales.
+	\end{itemize}
+
+	Las confirmaciones son identificadas usando un hash
+	(\href{https://es.wikipedia.org/wiki/Suma_de_verificaci%C3%B3n}{suma de verificación}) de su contenido, por ejemplo
+	\lstinline|5cd006a1c044b786ea8196636cd0b62e296dbbe5|.
+
+	Los hash de confirmación pueden abreviarse siempre que la abreviatura
+	sea única.
+
+	Las confirmaciones no pueden cambiar: contenido diferente
+	$\Rightarrow$ valor hash diferente.
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Ramas \fontspec[Renderer=Harfbuzz]{NotoColorEmoji.ttf}🌲}
+
+	\begin{itemize}
+		\item Una rama es una línea de desarrollo dentro de un
+		      repositorio.
+		\item Los repositorios pueden contener un número arbitrario de
+		      ramas.
+		\item \lstinline|git status| puede decirle en qué rama
+		      se encuentra.
+		\item Una rama siempre apunta a un \lstinline|commit|.
+		\item La creación de una nueva confirmación guarda la
+		      confirmación actual como principal y la rama luego apunta
+		      la nueva confirmación.
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Varios repositorios
+		\fontspec[Renderer=Harfbuzz]{NotoColorEmoji.ttf}📡}
+
+	\begin{itemize}
+		\item \faIcon{git} puede sincronizar cambios entre repositorios.
+		\item Los repositorios adicionales se llaman remotos.
+		\item Las ramas de un repositorio remoto tienen el nombre del
+		      repositorio como prefijo.
+		\item Puede clonar un repositorio remoto para obtener su contenido.
+		\item No se pueden ver ramas de repositorios remotos directamente.
+		\item En la primera revisión, git crea una rama de seguimiento.
+		\item Los nuevos cambios se pueden descargar y combinar usando
+		      \lstinline|git pull|.
+	\end{itemize}
+\end{frame}
+
+% \begin{frame}\transblindsvertical
+% 	\frametitle{Referencias}
+% 	%------------------------------------------------------------ 1
+% 	\only<1>{
+% 		\begin{itemize}
+% 			\item Libros
+% 			      \nocite{*}
+% 			      \printbibliography[heading=none,keyword=book]
+% 		\end{itemize}
+% 	}
+% 	%------------------------------------------------------------ 2
+% 	\only<2>{
+% 		\begin{itemize}
+% 			\item Artículos
+% 			      \printbibliography[heading=none,keyword=paper]
+% 		\end{itemize}
+% 	}
+% 	%------------------------------------------------------------ 3
+% 	\only<3>{
+% 		\begin{itemize}
+% 			\item Sitios web
+% 			      \printbibliography[heading=none,keyword=online]
+% 		\end{itemize}
+% 	}
+% \end{frame}
+
+\end{document}

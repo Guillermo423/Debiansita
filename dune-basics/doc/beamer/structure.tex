@@ -1,0 +1,212 @@
+% arara: clean: {
+% arara: --> extensions:
+% arara: --> ['log','pdf',
+% arara: --> 'aux']
+% arara: --> }
+% arara: lualatex: {
+% arara: --> shell: yes,
+% arara: --> interaction: batchmode
+% arara: --> }
+% arara: clean: {
+% arara: --> extensions:
+% arara: --> ['log',
+% arara: --> 'aux']
+% arara: --> }
+\documentclass[9pt,a3paper]{scrartcl}
+\usepackage[margin=.75in]{geometry}
+\usepackage[spanish,es-sloppy]{babel}%english,
+\usepackage{dirtree}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\pagestyle{empty}
+
+\parskip1ex
+\setlength{\parindent}{0ex}
+
+\begin{document}
+
+\par\bigskip
+\begin{center}\sffamily\bfseries
+	\Huge{Estructura de directorios en \href{https://gitlab.dune-project.org/pdelab/dune-pdelab-tutorials}{\texttt{dune-pdelab-tutorials}}} \par
+	\LARGE{\href{https://github.com/cpp-review-dune}{C++ Review Dune}}
+\end{center}
+\rule{\textwidth}{1pt}
+\bigskip
+
+\begin{wrapfigure}{l}{5.5cm}
+	\dirtree{%
+		.1 work.
+		.2 BSD.
+		.2 c++.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 exercise.
+		.3 slides.
+		.2 CC-BY-SA.
+		.2 cmake.
+		.3 modules.
+		.2 CMakeLists.txt.
+		.2 config.h.cmake.
+		.2 COPYING.
+		.2 dune.module.
+		.2 dune-pdelab-tutorials.pc.in.
+		.2 gridinterface.
+		.3 CMakeLists.txt.
+		.3 exercise.
+		.3 slides.
+		.2 latexstyle.
+		.3 exercise.sty.
+		.2 LICENSE.md.
+		.2 overview.
+		.3 abstractions.bib.
+		.3 abstractions.tex.
+		.3 CMakeLists.txt.
+		.3 debug.opts.
+		.3 exercise.sty.
+		.3 exercise-workflow.tex.
+		.3 overview.tex.
+		.3 release.opts.
+		.2 README.md.
+		.2 stamp-vc.
+		.2 tutorial00.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 exercise.
+		.3 slides.
+		.3 src.
+		.2 tutorial01.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 exercise.
+		.3 slides.
+		.3 src.
+		.2 tutorial02.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 slides.
+		.3 src.
+		.2 tutorial03.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 exercise.
+		.3 slides.
+		.3 src.
+		.2 tutorial04.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 exercise.
+		.3 slides.
+		.3 src.
+		.2 tutorial05.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 exercise.
+		.3 slides.
+		.3 src.
+		.2 tutorial06.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 exercise.
+		.3 slides.
+		.3 src.
+		.2 tutorial07.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 exercise.
+		.3 slides.
+		.3 src.
+		.2 tutorial08.
+		.3 CMakeLists.txt.
+		.3 doc.
+		.3 src.
+		.2 tutorial09.
+		.3 CMakeLists.txt.
+		.3 exercise.
+		.3 slides.
+		.3 src.
+		.2 TUTORIALLIST.
+		.2 workflow.
+		.3 CMakeLists.txt.
+		.3 exercise.
+		.3 slides.
+	}
+\end{wrapfigure}
+
+\Large
+
+Los ejercicios del repositorio \verb!dune-pdelab-tutorials! se desarrollarán a través de \href{https://gitpod.io}{GitPod}, una aplicación de \href{https://kubernetes.io}{Kubernetes} de código abierto para entornos de desarrollo automatizados y listos para utilizar fuera de la caja, que nos otorga $100$ horas gratuitas de uso durante cada mes.
+El \href{https://www.redhat.com/es/topics/virtualization/what-is-KVM}{hipervisor KVM} que emplea emula un sistema operativo basado en Arch Linux con el módulo \verb!dune-pdelab! instalado.
+En este entorno, tendrá un directorio \verb!work! en su carpeta de usuario \verb!gitpod!, que tiene la estructura mostrada a la izquierda.
+Estos ejemplos están en el directorio \verb!~/work!.
+
+\
+
+Dune usa \verb!cmake! como sistema de construcción.
+En \verb!cmake!, hay una clara separación entre el \textit{directorio fuente}, que
+generalmente está bajo control de versiones (aquí: el subdirectorio \verb!work!) y el \textit{directorio de compilación}, donde se construyen los ejecutables, los archivos de salida. El directorio de compilación será \verb!build!.
+
+\
+
+El directorio \verb!build! refleja la estructura del directorio fuente.
+Debería navegar por defecto al directorio \verb!build! del ejercicio actual y trabajar allí.
+Cada directorio de este módulo corresponde a un tutorial (\verb!tutorial[0-9]!).
+Todos comparten la siguiente estructura: el directorio \verb!src! contiene el
+código de ejemplo que se mostró en la conferencia.
+El directorio \verb!doc! contiene las fuentes de \LaTeX{} de una explicación detallada de
+el tutorial.
+El directorio \verb!exercise!, que es relevante para este curso, se subdivide aún más: \verb!task! contiene el código esqueleto sobre el que trabajar durante el ejercicio, \verb!doc! contiene la fuentes de la hoja de ejercicios y \verb!solution! contiene lo que esperas obtener.
+
+\
+
+En caso de que no esté familiarizado con un sistema GNU/Linux, aquí hay una pequeña lista de comandos frecuentes para el desarrollo de los ejercicios:
+\begin{itemize}
+	\item
+	      \verb!yay! actualiza la base de datos de los repositorios e instala paquetes actualizados.
+
+	\item
+	      \verb!man <command>! ver las páginas del manual del comando, en caso de estar disponible, escriba \verb!q! para salir. También es válido \verb!<command> --help!.
+	\item
+	      \verb!tldr <command>! ver las páginas del manual de la comunidad.
+	\item
+	      \verb!mkdir <name>! crea una carpeta \verb!<name>! sin contenido en el espacio de trabajo actual.
+	\item
+	      \verb!cmake <path/to/CMakeLists.txt>! crea una carpeta \verb!<name>! sin contenido en el espacio de trabajo actual.
+	\item
+	      \verb!cd <dir>! cambia el directorio de trabajo actual
+	      a \verb!dir! (al directorio del usuario, si se omite).
+	\item
+	      \verb!ls! lista el contenido del directorio de trabajo actual.
+	\item
+	      \verb!pwd! imprime el directorio de trabajo.
+	\item
+	      \verb!g++ <options> <sources>! compila fuentes de C++ (solo se necesita en el ejercicio de C++)
+	\item
+	      \verb!make <executablename>! (re)compila ejecutables en el directorio de compilación actual. Si se omite el nombre del ejecutable, se compilan todos los ejecutables del directorio actual.
+	\item
+	      \verb!paraview! es un programa de visualización para archivos VTK.
+\end{itemize}
+
+\section*{\Huge Recursos}
+
+\begin{description}
+	\item[Sección de tutoriales]
+		\url{https://wiki.archlinux.org/title/Bash_(Espa%C3%B1ol)}.
+	\item[Visores DICOM y renderizado de volumen]
+		\url{https://wiki.archlinux.org/title/List_of_applications/Science#DICOM_viewers_and_volume_rendering}
+\end{description}
+
+\section*{\Huge Pasos en GitPod}
+
+\begin{enumerate}
+	\item Iniciar sesión en \href{https://github.com/login}{GitHub} y en \href{https://gitpod.io/login}{GitPod}.
+	\item Crear un fork de \url{https://github.com/cpp-review-dune/prueba-gitpod} (haga click en el botón fork en la esquina superior derecha).
+	\item Ingresar a la liga \url{https://github.com/<usuario>/prueba-gitpod}.
+	\item En la barra de direcciones ingrese a \url{gitpod.io/#https://github.com/<usuario>/prueba-gitpod}.
+\end{enumerate}
+
+\vfill
+
+\footnotemark{Adaptación de \emph{Structure of the course material for the IWR Dune Course, March $2021$}.}
+%\selectlanguage{spanish}
+%\selectlanguage{english}
+\end{document}

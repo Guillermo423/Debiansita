@@ -1,0 +1,59 @@
+\input{dune-cmake-preamble}
+
+\begin{document}
+
+\frame[plain,noframenumbering]{\titlepage}
+
+
+\begin{frame}[fragile]
+	El fichero \lstinline{CMakeLists.txt} nos indica el mínimo de versión de cmake que soporta esta configuración.
+	En este script definiremos todo acerca de la construcción, desde el código fuente y objetivos, pasando por las pruebas, empaquetamiento, etc.
+	Este script empieza con
+	\href{https://cmake.org/cmake/help/latest/command/cmake_minimum_required.html}{\lstinline{cmake_minimum_required}}
+	\href{https://cmake.org/cmake/help/latest/command/project.html}{\lstinline{project}}
+	\href{https://cmake.org/cmake/help/latest/command/set.html}{\lstinline{set}}
+	\href{https://cmake.org/cmake/help/latest/command/add_executable.html}{\lstinline{add_executable}}
+\end{frame}
+
+\begin{frame}[fragile]
+
+\inputminted{cmake}{CMakeList.txt.sample}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{El comando \lstinline{duneproject}}
+	% https://gitlab.dune-project.org/core/dune-common/-/raw/master/bin/duneproject
+	Es un asistente en el lenguaje \lstinline{bash} que se encuentra en \lstinline{/usr/bin/duneproject}\ldots
+
+\end{frame}
+
+\begin{frame}\transblindsvertical
+	\frametitle{Referencias}
+	%------------------------------------------------------------ 1
+	\only<1>{
+		\begin{itemize}
+			\item Libros
+			      \nocite{*}
+			      \printbibliography[heading=none,keyword=book]
+		\end{itemize}
+	}
+	%------------------------------------------------------------ 2
+	\only<2>{
+		\begin{itemize}
+			\item Artículos
+			      \printbibliography[heading=none,keyword=paper]
+		\end{itemize}
+	}
+	%------------------------------------------------------------ 3
+	\only<3>{
+		\begin{itemize}
+			\item Sitios web
+			      \printbibliography[heading=none,keyword=online]
+		\end{itemize}
+	}
+\end{frame}
+
+\end{document}
+%https://cliutils.gitlab.io/modern-cmake/
+%https://www.dune-project.org/sphinx/content/sphinx/core-2.7/

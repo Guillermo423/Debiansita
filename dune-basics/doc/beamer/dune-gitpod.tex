@@ -1,0 +1,59 @@
+% arara: lualatex: { shell: yes }
+% arara: lualatex: { shell: yes }
+\input{dune-gitpod-preamble}
+
+\begin{document}
+
+\frame[plain,noframenumbering]{\titlepage}
+
+\framefor{german}
+{
+	{Grignard Reagents-General reaction mechanisms}% definition of \framefor{audience}     {\begin{Frame}  Frame contents\end{frame}} hence the frame title being in parentheses and no \begin{frame} \end{frame} environment 
+	This frame only appears for module german when compiled...
+}
+
+\begin{frame}{Grignard Reagents-Aldehydes and Ketones}
+	This frame appears for all modules as does this line.\\
+	\justfor{spanish}{But this line only appears for module spanish.}
+	\justfor{english}{This line only appears for module english.}
+	\justfor{german}{This line only appears for german.}
+
+\end{frame}
+
+\begin{frame}{Grignard Reagents-Esters}%[german]
+	This frame appears for all modules.
+	\showcontentfor{spanish}{spanish. Only the barest details are necessary.}\showcontentfor{english}{english. A little bit more information is given.}\showcontentfor{german}{german. A lot more information and maybe a few diagrams are given for this module.}\end{frame}
+
+\justfor{english}{
+	\begin{frame}
+		Only content for english
+	\end{frame}
+}
+
+% \begin{frame}\transblindsvertical
+% 	\frametitle{Referencias}
+% 	%------------------------------------------------------------ 1
+% 	\only<1>{
+% 		\begin{itemize}
+% 			\item Libros
+% 			      \nocite{*}
+% 			      \printbibliography[heading=none,keyword=book]
+% 		\end{itemize}
+% 	}
+% 	%------------------------------------------------------------ 2
+% 	\only<2>{
+% 		\begin{itemize}
+% 			\item Artículos
+% 			      \printbibliography[heading=none,keyword=paper]
+% 		\end{itemize}
+% 	}
+% 	%------------------------------------------------------------ 3
+% 	\only<3>{
+% 		\begin{itemize}
+% 			\item Sitios web
+% 			      \printbibliography[heading=none,keyword=online]
+% 		\end{itemize}
+% 	}
+% \end{frame}
+
+\end{document}

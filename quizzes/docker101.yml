@@ -1,0 +1,55 @@
+exam:
+  exam_title: "Docker 101"
+  exam_description: Docker básico.
+    Remember, this can be a practice exam, a exam proctored by a teacher, a survey, or whatever you want.
+  exam_author: "C++ Review Dune"
+  exam_edit_date: "18/08/2021"
+  exam_allowed_time: 120
+  exam_allowed_time_units: "seconds"
+  exam_passing_score: 70
+
+questions:
+  - question: ¿Con cuál comando listas las imágenes Docker?
+    question_allowed_time: 45
+    selection:
+      - "docker version"
+      - "docker info"
+      - "docker system"
+      - "docker image ls": true
+
+  - question: ¿Cómo detener un contenedor en ejecución?
+    selection:
+      - "stop micontainer": true
+      - "stop"
+      - "docker stop micontainer"
+      - "stop all": true
+
+  - question: "¡Rápido! ¿Cómo ver la información de los objetos Docker?"
+    question_allowed_time: 10
+    selection:
+      - "docker info mycontainer"
+      - "docker path"
+      - "docker inspect mycontainer": true
+      - "docker inspect mycontainer"
+
+  - question:
+      "¿Cómo listar los volúmenes existentes?"
+    selection:
+      - "ls volumes"
+      - "volumes"
+      - "volume ls"
+      - "docker volume ls": true
+
+  - question: "¿Cómo listar todos los contenedores?"
+    selection:
+      - "docker version"
+      - "docker container ls -a": true
+      - "docker stats"
+      - "docker volume"
+
+  - question: "¿Qué hace el comando docker exec -it test1 bash?"
+    selection:
+      - "Entrar al shell de test1": true
+      - "Consultar el container test1"
+      - "Correr el container test1"
+      - "Borrar el container test1"

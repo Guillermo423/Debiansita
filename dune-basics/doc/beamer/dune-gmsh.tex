@@ -1,0 +1,202 @@
+\input{dune-gmsh-preamble}
+
+\begin{document}
+
+\frame[plain,noframenumbering]{\titlepage}
+
+\begin{frame}[fragile]
+	\frametitle{Acerca de \texttt{gmsh}}
+	Es un software de código abierto para mallas tridimensionales de elementos
+	finitos y visualización de datos, cuenta su propio lenguaje de scripting y cuatro módulos:
+
+	\begin{description}
+		\item[\texttt{geometry}]
+
+			capa geométrica orientado a objetos para la creación de formas tridimensionales. Motores disponibles: Gmsh CAD y OpenCascade.
+
+		\item[\texttt{meshing}]
+
+			un módulo de mallado
+
+		\item[\texttt{solving}]
+
+			un módulo solucionador de ecuaciones
+
+		\item[\texttt{post-processing}]
+
+			un módulo de postprocesador.
+	\end{description}
+
+	\
+
+	Estamos interesados en usar la interfaz de línea de comandos
+	\verb|gmsh|, además de conocer dicho lenguaje de scripting así como
+	sus APIs.
+
+	\
+
+	Un \verb|archivo.geo| $\stackrel{\texttt{gmsh}}{\longrightarrow}$ \verb|archivo.msh|.
+	El primero contiene información de la geometría y parámetros de la malla.
+\end{frame}
+
+\begin{frame}[fragile]
+	Si estamos usando el repositorio \verb|arch4edu| o el \verb|aur|, instale con \verb|yay -Sy gmsh gmsh-docs|.\scriptsize
+	\begin{verbatim}
+		Repository      : arch4edu
+		Name            : gmsh
+		Version         : 4.8.4-1
+		Description     : An automatic 3D finite element mesh generator with pre and post-processing facilities.
+		Architecture    : x86_64
+		URL             : http://gmsh.info/
+		Licenses        : custom
+		Groups          : None
+		Provides        : None
+		Depends On      : fltk  med  opencascade  cairo  metis  alglib  ann  glu
+		Optional Deps   : gmsh-docs: docs for gmsh
+		python2: for gmsh.py
+		python: for gmsh.py
+		julia: for gmsh.jl
+		Conflicts With  : None
+		Replaces        : None
+		Download Size   : 7.80 MiB
+		Installed Size  : 38.88 MiB
+		Packager        : calil (on behalf of Jingbei Li) <i@jingbei.li>
+		Build Date      : Sun 02 May 2021 02:12:25 PM -05
+		Validated By    : MD5 Sum  SHA-256 Sum  Signature
+	\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Comandos elementales}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Objetivos de esta introdución}
+	A number of advanced.
+	\begin{itemize}
+		\item Correr los \href{https://github.com/orgs/cpp-review-dune/packages}{imágenes prediseñadas} con el programa \lstinline{docker} en sistemas tipo Unix.
+		\item Crear una malla con \lstinline{gmsh} a través de la API (C/C++, Python, Julia).
+		\item Realizar los ejemplos resueltos del \textsc{Dune book}.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conociendo el sistema operativo \href{https://archlinux.org}{Arch Linux}}
+
+	Es una distribución GNU/Linux de propósito general, desarrollada\footnote{El líder del proyecto es \href{https://wiki.archlinux.org/title/User:Anthraxx}{\texttt{Anthraxx}}, desarrollador alemán del kernel \href{https://github.com/anthraxx/linux-hardened}{\texttt{linux-hardened}}.} independientemente para procesadores x86-64, que se adhiere a los principios de simplicidad, modernidad, pragmatismo, centrado en usuarios y versatilidad.
+
+	\
+
+	Proporciona las últimas versiones estables de la mayoría del software siguiendo el modelo de \href{https://en.wikipedia.org/wiki/Rolling\_release}{lanzamiento continuo}, no existen versiones como en Ubuntu 20.04, 21.10, 22.04, etc.
+
+	\
+
+	Arch está respaldado por \lstinline{pacman}, un gestor de paquetes ligero, sencillo y rápido, que permite actualizar todo el sistema con una orden.
+	Los scripts \href{https://wiki.archlinux.org/title/PKGBUILD}{PKGBUILD} aportados por la comunidad para la elaboración desde las fuentes, como los módulos de DUNE, se encuentran en el \href{http://aur.archlinux.org}{\emph{Arch User Repository}}.
+
+	\begin{table}[ht!]
+		\caption{Comparación de la línea de comando del gestión de software (fuente: \url{wiki.archlinux.org})}
+		\centering\footnotesize
+		\begin{tabular}{cccp{50pt}cc}
+			\toprule
+			Acción             & Arch                    & Red Hat/Fedora          & Debian/Ubuntu                                          & SLES/openSUSE           & Gentoo
+			\tabularnewline
+			\midrule
+			Instala paquetes   & \lstinline|pacman -S|  & \lstinline|dnf install|  & \lstinline|apt install|                                 & \lstinline|zypper install|  & \lstinline|emerge -a|
+			\tabularnewline
+			Elimina paquetes   & \lstinline|pacman -Rs|  & \lstinline|dnf remove|  & \lstinline|apt remove|                                 & \lstinline|zypper remove|  & \lstinline|emerge -C|
+			\tabularnewline
+			Busca paquetes     & \lstinline|pacman -Ss| & \lstinline|dnf search| & \lstinline|apt search|                                & \lstinline|zypper search| & \lstinline|emerge -S|
+			\tabularnewline
+			Actualiza paquetes & \lstinline|pacman -Syu| & \lstinline|dnf upgrade| & \lstinline|apt update \&\&|\newline\lstinline|apt upgrade| & \lstinline|zypper update| & \lstinline|emerge -u world|
+			\tabularnewline
+			\bottomrule
+		\end{tabular}
+	\end{table}
+
+\end{frame}
+
+\begin{frame}
+
+	En esta ocasión hemos elegido Arch Linux como ambiente de trabajo porque tiene disponible una gran variedad de módulos de DUNE.
+	Es recomendable habilitar el repositorio \href{https://wiki.archlinux.org/title/Unofficial\_user\_repositories\#arch4edu}{\texttt{arch4edu}}\footnote{Administrado por Jingbei Li de la Universidad de Tsinghua.}.
+\end{frame}
+
+\begin{frame}[fragile]
+	\begin{lstlisting}
+    gitpod ~/dune-basics $ cd
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+	\begin{figure}
+		\centering
+		\buildVoronoiBW[tikz,delaunay=show,styleDelaunay=dashed]
+		{(0.3,0.3);(1.5,1);(4,0);(4.5,2.5);(1.81,2.14);(2.5,0.5);(2.8,1.5);(0.1,2);(1.5,-0.3)}
+	\end{figure}
+\end{frame}
+
+%\lstinputpath{../../../sandbox}
+
+\begin{frame}[fragile]
+	\frametitle{Classes}
+
+	\lstinputlisting[
+		caption={Programa \texttt{hello-linux.cc}.},
+		label=hello-linux.cc,
+	]{../../../sandbox/hello-linux.cc}
+
+
+\end{frame}
+
+\begin{frame}\transblindsvertical
+	\frametitle{Referencias}
+	%------------------------------------------------------------ 1
+	\only<1>{
+		\begin{itemize}
+			\item Libros
+			      \nocite{*}
+			      \printbibliography[heading=none,keyword=book]
+		\end{itemize}
+	}
+	%------------------------------------------------------------ 2
+	\only<2>{
+		\begin{itemize}
+			\item Artículos
+			      \printbibliography[heading=none,keyword=paper]
+		\end{itemize}
+	}
+	%------------------------------------------------------------ 3
+	\only<3>{
+		\begin{itemize}
+			\item Sitios web
+			      \printbibliography[heading=none,keyword=online]
+		\end{itemize}
+	}
+\end{frame}
+
+\end{document}
+
+% https://albertsk.files.wordpress.com/2012/12/gmsh_tutorial.pdf
+% https://indico.cern.ch/event/591096/contributions/2388462/attachments/1390640/2118262/main.pdf
+% http://jsdokken.com/converted_files/tutorial_gmsh.html
+% https://github.com/alejohg/tutoriales-gmsh
+% https://github.com/stvanegasgi/Tutorial-Gmsh-4.6.0
+% https://github.com/ahojukka5/gmshparser
+% https://victorsndvg.github.io/FEconv/formats/gmshmsh.xhtml
+% https://gmsh.info/doc/texinfo/gmsh.html
+% https://github.com/sunnyerteit/inventasFlow
+% https://ctan.dcc.uchile.cl/macros/luatex/latex/luamesh/doc/luamesh-doc.pdf
+% https://gmsh.info/doc/course/general_overview.pdf
+% https://indico.cern.ch/event/591096/#10-a-getdp-intro
+% http://freshkiss3d.gforge.inria.fr/index.html
+% https://framabook.org/docs/Code_Aster/beginning_with_code_aster-jp_aubry-20190129.pdf
+% https://www.youtube.com/watch?v=IuMa4bQI1Fg
+% https://www.youtube.com/playlist?list=PLbiOzt50Bx-l2QyX5ZBv9pgDtIei-CYs_
+% https://www.youtube.com/watch?v=oJB7ODwBoQ8
+% https://www.youtube.com/watch?v=LsL39CuPFx0
+% https://www.youtube.com/watch?v=Lhgw4dSEJbQ
+% https://www.youtube.com/watch?v=9w4Te298zsc
+% https://www.youtube.com/watch?v=R1S6cAwasuM
+% https://www.youtube.com/playlist?list=PLxT-itJ3HGuVHvjEqKVwLrcllRd5P4pXm
+% http://gmsh.info/dev/doc/texinfo/gmsh.txt
